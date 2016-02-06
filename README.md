@@ -71,3 +71,5 @@ Thank you for helping out!
 [settings]: http://sublimelinter.readthedocs.org/en/latest/settings.html
 [linter-settings]: http://sublimelinter.readthedocs.org/en/latest/linter_settings.html
 [inline-settings]: http://sublimelinter.readthedocs.org/en/latest/settings.html#inline-settings
+=======
+# SublimeLinter-contrib-AWS-Cloudformation-JSON
