@@ -1,0 +1,1 @@
+# SublimeLinter-contrib-AWS-Cloudformation-JSON
