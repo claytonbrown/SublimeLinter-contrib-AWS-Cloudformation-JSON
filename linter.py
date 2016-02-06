@@ -15,18 +15,45 @@ import sys
 import os.path
 import re
 import sublime
-from SublimeLinter.lint import persist, PythonLinter, util
-# from SublimeLinter.lint import PythonLinter, util
-# #from SublimeLinter.lint import Linter
+from SublimeLinter.lint import PythonLinter
+# save and reference preferenses etc
+from SublimeLinter.lint import persist
+# If the linter outputs errors only on stderr or stdout, set error_stream to util.STREAM_STDERR or util.STREAM_STDOUT
+from SublimeLinter.lint import util
 
 
+# packaged dependencies is the folder in our plugin
+sys.path.append(os.path.join(os.path.dirname(__file__), "./dist/"))
+import boto3
+
+if persist.settings.get('debug'):
+    persist.printf('{} dependencies: {}'.format(__name__, boto3))
+    persist.printf('{} dependencies: {}'.format(__name__, persist))
+    persist.printf('{} dependencies: {}'.format(__name__, util))
+
+
+"""
+awscli
+boto
+botocore
+colorama
+concurrent
+dateutil
+docutils
+jmespath
+pyasn1
+rsa
+six.py
+"""
+
+# http://www.sublimelinter.com/en/latest/linter_settings.html
 
 
 class AWSCloudformationJSON(PythonLinter):
 
     """Provides an interface to json.loads()."""
 
-    syntax = 'json'
+    syntax = 'cloudformation'
     cmd = None
     loose_regex = re.compile(r'^.+: (?P<message>.+) in \(data\):(?P<line>\d+):(?P<col>\d+)')
     strict_regex = re.compile(r'^(?P<message>.+):\s*line (?P<line>\d+) column (?P<col>\d+)')
@@ -34,12 +61,27 @@ class AWSCloudformationJSON(PythonLinter):
     defaults = {
         'strict': True
     }
-
     extensions = [
         '.template',
         '.cf.json',
         '.cf',
     ]
+
+    aws_cloudformation_api = None
+
+    @classmethod
+    def initialize(self):
+        """Initialize the class after plugin load."""
+
+        if self.module is None:
+            print("error no class module")
+            return
+
+        try:
+            print(boto3)
+            print("Initialised class module: %s" % (self.module))
+        except Exception as e:
+            print(e)
 
     def run(self, cmd, code):
         """Attempt to parse code as JSON, return '' if it succeeds, the error message if it fails."""
@@ -50,9 +92,13 @@ class AWSCloudformationJSON(PythonLinter):
         try:
             if strict:
                 self.__class__.regex = self.strict_regex
+
+                # establish basic JSON compliance with in built python JSON library
                 template = json.loads(code)
-                import boto.cloudformation
-                print(boto.cloudformation)
+
+                # now validate against the AWS api
+                cfn = boto3.client('cloudformation')
+                template = cfn.validate_template(TemplateBody=code)
                 print(template)
             else:
                 self.__class__.regex = self.loose_regex
