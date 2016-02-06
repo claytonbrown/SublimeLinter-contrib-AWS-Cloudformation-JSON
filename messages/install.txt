@@ -1,0 +1,10 @@
+SublimeLinter-contrib-AWS-Cloudformation-JSON
+-------------------------------
+This linter plugin for SublimeLinter provides an interface to AWS-Cloudformation-JSON.
+
+** IMPORTANT! **
+
+Before this plugin will activate, you *must*
+follow the installation instructions here:
+
+https://github.com/Clayton Brown/SublimeLinter-contrib-AWS-Cloudformation-JSON
