@@ -78,3 +78,8 @@ Thank you for helping out!
 # TODO: arn:aws:elasticbeanstalk:region:accountid:resourcetype/resourcepath
 # http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.policies.arn.html
 # http://stackoverflow.com/questions/23416098/how-do-i-change-the-color-of-the-json-key-in-sublime-text2
+
+https://s3.amazonaws.com/quickstart-reference/enterprise-accelerator/nist/latest/templates/stack1-access-01.json
+https://s3.amazonaws.com/quickstart-reference/enterprise-accelerator/nist/latest/templates/stack2-network-01.json
+https://s3.amazonaws.com/quickstart-reference/enterprise-accelerator/nist/latest/templates/stack3-resources-01.json
+https://s3.amazonaws.com/quickstart-reference/enterprise-accelerator/nist/latest/templates/stack4-application-01.json
