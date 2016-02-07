@@ -1,0 +1,150 @@
+{
+  "cmd": [
+    "aws",
+    "cloudformation",
+    "validate-template",
+    "--template-body",
+    "file://$file"
+  ],
+  "selector": "source.cloudformation",
+  "line_regex": ".*ValidationError.*:(.*)",
+  "path": "/usr/local/bin/",
+  "env": {
+    "AWS_DEFAULT_REGION": "TODO",
+    "AWS_CONFIG_FILE": "~/TODO-awscli.profiles",
+    "AWS_DEFAULT_PROFILE": "TODO",
+    "AWS_CFORM_BUCKET": "TODO-S3-BUCKETNAME"
+  },
+  "variants": [
+    {
+      "cmd": [
+        "aws",
+        "s3",
+        "cp",
+        "$file",
+        "s3://TODO/"
+      ],
+      "name": "Publish template to S3:://TODO/"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "us-east-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in US East (Northern Virginia) Region [us-east-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "us-west-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in US West (Northern California) Region [us-west-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "us-west-2",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in US West (Oregon) Region [us-west-2]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "ap-northeast-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in Asia Pacific (Tokyo) Region [ap-northeast-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "ap-southeast-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in Asia Pacific (Singapore) Region [ap-southeast-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "ap-southeast-2",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in Asia Pacific (Sydney) Region [ap-southeast-2]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "eu-west-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in EU (Ireland) Region [eu-west-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "sa-east-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in South America (Sao Paulo) Region [sa-east-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "us-gov-west-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in AWS GovCloud (US) Region [us-gov-west-1]"
+    },
+    {
+      "cmd": [
+        "aws",
+        "cloudformation",
+        "validate-template",
+        "--region",
+        "cn-north-1",
+        "--template-body",
+        "file://$file"
+      ],
+      "name": "Validate template in China(Beijing) Region [cn-north-1]"
+    }
+  ]
+}

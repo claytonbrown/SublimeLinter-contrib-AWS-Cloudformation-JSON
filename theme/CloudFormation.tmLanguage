@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>fileTypes</key>
+    <array>
+        <string>template</string>
+        <string>cloudformation-dev</string>
+        <string>cform</string>
+        <string>json</string>
+    </array>
+    <key>foldingStartMarker</key>
+    <string>(?x:       # turn on extended mode
+                          ^        # a line beginning with
+                          \s*      # some optional space
+                          [{\[]    # the start of an object or array
+                          (?!      # but not followed by
+                            .*     # whatever
+                            [}\]]  # and the close of an object or array
+                            ,?     # an optional comma
+                            \s*    # some optional space
+                            $      # at the end of the line
+                          )
+                          |        # ...or...
+                          [{\[]    # the start of an object or array
+                          \s*      # some optional space
+                          $        # at the end of the line
+                        )</string>
+    <key>foldingStopMarker</key>
+    <string>(?x:     # turn on extended mode
+                         ^      # a line beginning with
+                         \s*    # some optional space
+                         [}\]]  # and the close of an object or array
+                       )</string>
+    <key>keyEquivalent</key>
+    <string>^~J</string>
+    <key>name</key>
+    <string>CloudFormation</string>
+    <key>patterns</key>
+    <array>
+        <dict>
+            <key>include</key>
+            <string>#value</string>
+        </dict>
+    </array>
+    <key>repository</key>
+    <dict>
+        <key>array</key>
+        <dict>
+            <key>begin</key>
+            <string>\[</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.array.begin.json</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>\]</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.array.end.json</string>
+                </dict>
+            </dict>
+            <key>name</key>
+            <string>meta.structure.array.json</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#value</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>,</string>
+                    <key>name</key>
+                    <string>punctuation.separator.array.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>[^\s\]]</string>
+                    <key>name</key>
+                    <string>invalid.illegal.expected-array-separator.json</string>
+                </dict>
+            </array>
+        </dict>
+        <key>constant</key>
+        <dict>
+            <key>match</key>
+            <string>\b(?:true|false|null|c1.medium)\b</string>
+            <key>name</key>
+            <string>constant.language.json</string>
+        </dict>     
+        <key>number</key>
+        <dict>
+            <key>comment</key>
+            <string>handles integer and decimal numbers</string>
+            <key>match</key>
+            <string>(?x:         # turn on extended mode
+                         -?         # an optional minus
+                         (?:
+                           0        # a zero
+                           |        # ...or...
+                           [1-9]    # a 1-9 character
+                           \d*      # followed by zero or more digits
+                         )
+                         (?:
+                           (?:
+                             \.     # a period
+                             \d+    # followed by one or more digits
+                           )?
+                           (?:
+                             [eE]   # an e character
+                             [+-]?  # followed by an option +/-
+                             \d+    # followed by one or more digits
+                           )?       # make exponent optional
+                         )?         # make decimal portion optional
+                       )</string>
+            <key>name</key>
+            <string>constant.numeric.json</string>
+        </dict>
+        <key>object</key>
+        <dict>
+            <key>begin</key>
+            <string>\{</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.dictionary.begin.json</string>
+                </dict>
+            </dict>
+            <key>comment</key>
+            <string>a JSON object</string>
+            <key>end</key>
+            <string>\}</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.dictionary.end.json</string>
+                </dict>
+            </dict>
+            <key>name</key>
+            <string>meta.structure.dictionary.json</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>comment</key>
+                    <string>the JSON object key</string>
+                    <key>include</key>
+                    <string>#keyString</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#comments</string>
+                </dict>
+                <dict>
+                    <key>begin</key>
+                    <string>:</string>
+                    <key>beginCaptures</key>
+                    <dict>
+                        <key>0</key>
+                        <dict>
+                            <key>name</key>
+                            <string>punctuation.separator.dictionary.key-value.json</string>
+                        </dict>
+                    </dict>
+                    <key>end</key>
+                    <string>(,)|(?=\})</string>
+                    <key>endCaptures</key>
+                    <dict>
+                        <key>1</key>
+                        <dict>
+                            <key>name</key>
+                            <string>punctuation.separator.dictionary.pair.json</string>
+                        </dict>
+                    </dict>
+                    <key>name</key>
+                    <string>meta.structure.dictionary.value.json</string>
+                    <key>patterns</key>
+                    <array>
+                        <dict>
+                            <key>comment</key>
+                            <string>the JSON object value</string>
+                            <key>include</key>
+                            <string>#value</string>
+                        </dict>
+                        <dict>
+                            <key>match</key>
+                            <string>[^\s,]</string>
+                            <key>name</key>
+                            <string>invalid.illegal.expected-dictionary-separator.json</string>
+                        </dict>
+                    </array>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>[^\s\}]</string>
+                    <key>name</key>
+                    <string>invalid.illegal.expected-dictionary-separator.json</string>
+                </dict>
+            </array>
+        </dict>
+        <key>keyString</key>
+        <dict>
+            <key>begin</key>
+            <string>"</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.begin.json</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>"</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.end.json</string>
+                </dict>             
+            </dict>
+            <key>name</key>
+            <string>string.quoted.double.key.json</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>match</key>
+                    <string>(?x:                # turn on extended mode
+                     \\                # a literal backslash
+                     (?:               # ...followed by...
+                       ["\\/bfnrt]     # one of these characters
+                       |               # ...or...
+                       u               # a u
+                       [0-9a-fA-F]{4}  # and four hex digits
+                     )
+                   )</string>
+                    <key>name</key>
+                    <string>constant.character.escape.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string></string>
+                    <key>name</key>
+                    <string>invalid.illegal.unrecognized-string-escape.json</string>
+                </dict> 
+                <dict>
+                    <key>match</key>
+                    <string>\b(Fn\:\:.+?|Ref)\b</string>
+                    <key>name</key>
+                    <string>constant.language.option.json</string><!--purple-->
+                </dict> 
+                <dict>
+                    <key>match</key>
+                    <string>\b(us-east-1|ap-northeast-1|sa-east-1|ap-southeast-1|ap-southeast-2|us-west-2|us-west-1|eu-west-1|us-gov-west-1|fips-us-gov-west-1|cn-north-1|32|64|t1.micro|hi1.4xlarge|hs1.8xlarge|c1.medium|c1.xlarge|c3.2xlarge|c3.4xlarge|c3.8xlarge|c3.large|c3.xlarge|cache.c1.xlarge|cache.m1.large|cache.m1.medium|cache.m1.small|cache.m1.xlarge|cache.m2.2xlarge|cache.m2.4xlarge|cache.m2.xlarge|cache.m3.2xlarge|cache.m3.xlarge|cache.t1.micro|cc1.4xlarge|cc2.8xlarge|cg1.4xlarge|cr1.8xlarge|db.m1.large|db.m1.medium|db.m1.small|db.m1.xlarge|db.m2.2xlarge|db.m2.4xlarge|db.m2.xlarge|db.t1.micro|dw.hs1.8xlarge|dw.hs1.xlarge|eu-west-1a|eu-west-1b|eu-west-1c|g2.2xlarge|i2.2xlarge|i2.4xlarge|i2.8xlarge|i2.xlarge|m1.large|m1.medium|m1.small|m1.xlarge|m2.2xlarge|m2.4xlarge|m2.xlarge|m3.2xlarge|m3.xlarge|sa-east-1a|sa-east-1b|us-east-1a|us-east-1b|us-east-1c|us-east-1d|us-east-1e|us-west-1a|us-west-1b|us-west-1c|us-west-2a|us-west-2b|us-west-2c|ap-northeast-1a|ap-northeast-1b|ap-northeast-1c|ap-southeast-1a|ap-southeast-1b|ap-southeast-2a|ap-southeast-2b|2010-09-023)\b</string>
+                    <key>name</key>
+                    <string>storage.modifier.global.json</string> <!--red/pink-->
+                </dict>
+
+            </array>
+        </dict>
+        <key>string</key>
+        <dict>
+            <key>begin</key>
+            <string>"</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.begin.json</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>"</string>
+            <key>endCaptures</key>
+            <dict>
+                <key>0</key>
+                <dict>
+                    <key>name</key>
+                    <string>punctuation.definition.string.end.json</string>
+                </dict>
+            </dict>
+            <key>name</key>
+            <string>string.quoted.double.json</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>match</key>
+                    <string>(?x:                # turn on extended mode
+                     \\                # a literal backslash
+                     (?:               # ...followed by...
+                       ["\\/bfnrt]     # one of these characters
+                       |               # ...or...
+                       u               # a u
+                       [0-9a-fA-F]{4}  # and four hex digits
+                     )
+                   )</string>
+                    <key>name</key>
+                    <string>constant.character.escape.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\\.</string>
+                    <key>name</key>
+                    <string>invalid.illegal.unrecognized-string-escape.json</string>
+                </dict>
+                
+                <dict>
+                    <key>match</key>
+                    <string>\"(TODO)\"</string>
+                    <key>name</key>
+                    <string>storage.modifier.global.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\b(ami-.*)\b</string>
+                    <key>name</key>
+                    <string>storage.modifier.global.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\b(AWS\:\:.*\:\:.+?|2010-09-09|TRUE|FALSE|true|false|tcp|udp|HTTP|HTTPS|Delete|Retain)\b</string>
+                    <key>name</key>
+                    <string>storage.type.string.json</string>
+                </dict>
+                <dict>
+                    <key>match</key>
+                    <string>\b(AWS\:\:.*\:\:.+?|AWS\:\:.+?|.*\.amazonaws\.com.+?|arn\:.+?|sts\:.+?)\b</string>
+                    <key>name</key>
+                    <string>storage.type.string.json</string>
+                </dict>
+
+                 <dict>
+                    <key>match</key>
+                    <string>\b([aws|s3|sts|cloudwatch]\:.+?)\b</string>
+                    <key>name</key>
+                    <string>storage.type.string.json</string>
+                </dict>
+                
+
+                
+                <dict>
+                    <key>match</key>
+                    <string>\b(ec2-user|cache.|db.|root|ap-northeast-1|ap-northeast-1a|ap-northeast-1b|ap-northeast-1c|ap-southeast-1|ap-southeast-1a|ap-southeast-1b|ap-southeast-2|ap-southeast-2a|ap-southeast-2b|c1.medium|c1.xlarge|c3.2xlarge|c3.4xlarge|c3.8xlarge|c3.large|c3.xlarge|cc2.8xlarge|cg1.4xlarge|cr1.8xlarge|eu-central-1|eu-central-1a|eu-central-1b|eu-west-1|eu-west-1a|eu-west-1b|eu-west-1c|g2.2xlarge|hi1.4xlarge|hs1.8xlarge|i2.2xlarge|i2.4xlarge|i2.8xlarge|i2.xlarge|m1.large|m1.medium|m1.small|m1.xlarge|m2.2xlarge|m2.4xlarge|m2.xlarge|m3.2xlarge|m3.large|m3.medium|m3.xlarge|r3.2xlarge|r3.4xlarge|r3.8xlarge|r3.large|r3.xlarge|sa-east-1|sa-east-1a|sa-east-1b|t1.micro|t2.medium|t2.micro|t2.small|us-east-1|us-east-1b|us-east-1c|us-east-1d|us-east-1e|us-west-1|us-west-1a|us-west-1b|us-west-2|us-west-2a|us-west-2b|us-west-2c|[0-9].+?)\b</string>
+                    <key>name</key>
+                    <string>storage.modifier.global.json</string>
+                </dict>
+                
+                <!-- constant.language.option.json -->
+
+                <dict>
+                    <key>match</key>
+                    <string>\b(Array|Boolean|ConditionDeclaration|ConditionDefinitions|DestinationCidrBlock|Json|Named-Array|Number|Object|Policy|Reference|Resource|String|[A|a]llow|[D|d]eny|True|true|False|false)\b</string> <!--purple-->
+                    <key>name</key>
+                    <string>constant.language.option-value.json</string>
+                </dict>
+                
+                <dict>
+                    <key>match</key>
+                    
+                    <string>!|\$|%|&amp;|\*|\-\-|\-|\+\+|\+|~|===|==|=|!=|!==|&lt;=|&gt;=|&lt;&lt;=|&gt;&gt;=|&gt;&gt;&gt;=|&lt;&gt;|&lt;|&gt;|!|&amp;&amp;|\|\||\?\:|\*=|(?&lt;!\()/=|%=|\+=|\-=|&amp;=|\^=\b</string>
+
+                    <key>name</key>
+                    <string>constant.language.option-value.json</string> <!--purple-->
+                </dict>
+                
+    
+            </array>
+        </dict>
+        <key>value</key>
+        <dict>
+            <key>comment</key>
+            <string>the 'value' diagram at http://json.org</string>
+            <key>patterns</key>
+            <array>
+                
+                <dict>
+                    <key>include</key>
+                    <string>#constant</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#number</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#string</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#array</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#object</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#comments</string>
+                </dict>
+            </array>
+        </dict>
+        <!-- Comments aren't in the JSON spec, but they are accepted by some parsers -->
+        <key>comments</key>
+        <dict>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>begin</key>
+                    <string>/\*\*</string>
+                    <key>captures</key>
+                    <dict>
+                        <key>0</key>
+                        <dict>
+                            <key>name</key>
+                            <string>punctuation.definition.comment.json</string>
+                        </dict>
+                    </dict>
+                    <key>end</key>
+                    <string>\*/</string>
+                    <key>name</key>
+                    <string>comment.block.documentation.json</string>
+                </dict>
+                <dict>
+                    <key>begin</key>
+                    <string>/\*</string>
+                    <key>captures</key>
+                    <dict>
+                        <key>0</key>
+                        <dict>
+                            <key>name</key>
+                            <string>punctuation.definition.comment.json</string>
+                        </dict>
+                    </dict>
+                    <key>end</key>
+                    <string>\*/</string>
+                    <key>name</key>
+                    <string>comment.block.json</string>
+                </dict>
+                <dict>
+                    <key>captures</key>
+                    <dict>
+                        <key>1</key>
+                        <dict>
+                            <key>name</key>
+                            <string>punctuation.definition.comment.json</string>
+                        </dict>
+                    </dict>
+                    <key>match</key>
+                    <string>(//).*$\n?</string>
+                    <key>name</key>
+                    <string>comment.line.double-slash.js</string>
+                </dict>
+            </array>
+        </dict>
+
+        
+
+    </dict>
+    <!--adding cloudformation and AWS specific matches --> 
+        <key>awskeyword</key>       
+        <dict>
+            <key>match</key>           
+            <string>\"(ami-.*)\"</string>
+            <key>name</key>
+            <string>keyword.operator.js</string>
+        </dict>
+        <key>awskeyword2</key>      
+        <dict>
+            <key>match</key>
+            <string>\"(ap-northeast-1|ap-northeast-1a|ap-northeast-1b|ap-northeast-1c|ap-southeast-1|ap-southeast-1a|ap-southeast-1b|ap-southeast-2|ap-southeast-2a|ap-southeast-2b|c1.medium|c1.xlarge|c3.2xlarge|c3.4xlarge|c3.8xlarge|c3.large|c3.xlarge|cc2.8xlarge|cg1.4xlarge|cr1.8xlarge|eu-central-1|eu-central-1a|eu-central-1b|eu-west-1|eu-west-1a|eu-west-1b|eu-west-1c|g2.2xlarge|hi1.4xlarge|hs1.8xlarge|i2.2xlarge|i2.4xlarge|i2.8xlarge|i2.xlarge|m1.large|m1.medium|m1.small|m1.xlarge|m2.2xlarge|m2.4xlarge|m2.xlarge|m3.2xlarge|m3.large|m3.medium|m3.xlarge|r3.2xlarge|r3.4xlarge|r3.8xlarge|r3.large|r3.xlarge|sa-east-1|sa-east-1a|sa-east-1b|t1.micro|t2.medium|t2.micro|t2.small|us-east-1|us-east-1b|us-east-1c|us-east-1d|us-east-1e|us-west-1|us-west-1a|us-west-1b|us-west-2|us-west-2a|us-west-2b|us-west-2c|32|64|2010-09-023)\"</string>
+            <key>name</key>
+            <string>keyword.operator.js</string>
+        </dict>
+        
+    <key>scopeName</key>
+    <string>source.cloudformation</string>
+    <key>uuid</key>
+    <string>0C3868E4-F96B-4E55-B204-1DCB5A20748B</string>
+</dict>
+</plist>
+

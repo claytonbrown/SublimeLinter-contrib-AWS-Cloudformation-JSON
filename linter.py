@@ -108,3 +108,33 @@ class AWSCloudformationJSON(PythonLinter):
 
         except ValueError as err:
             return str(err)
+
+    def get_report(self):
+        """Return the Report class for use by flake8."""
+        """
+        if self.report is None:
+            from pep8 import StandardReport
+
+            class Report(StandardReport):
+
+                ""Provides a report in the form of a single multiline string, without printing.""
+
+                def get_file_results(self):
+                    ""Collect and return the results for this file.""
+                    self._deferred_print.sort()
+                    results = ''
+
+                    for line_number, offset, code, text, doc in self._deferred_print:
+                        results += '{path}:{row}:{col}: {code} {text}\n'.format_map({
+                            'path': self.filename,
+                            'row': self.line_offset + line_number,
+                            'col': offset + 1,
+                            'code': code,
+                            'text': text
+                        })
+
+                    return results
+
+            self.__class__.report = Report
+        """
+        return self.report
