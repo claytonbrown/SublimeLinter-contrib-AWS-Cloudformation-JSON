@@ -87,7 +87,7 @@ TODO\-endpoints
     <key>keyEquivalent</key>
     <string>^~J</string>
     <key>name</key>
-    <string>CloudFormation</string>
+    <string>AWS-CloudFormation-JSON</string>
     <key>patterns</key>
     <array>
         <dict>
