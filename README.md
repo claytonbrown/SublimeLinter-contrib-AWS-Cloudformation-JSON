@@ -72,4 +72,9 @@ Thank you for helping out!
 [linter-settings]: http://sublimelinter.readthedocs.org/en/latest/linter_settings.html
 [inline-settings]: http://sublimelinter.readthedocs.org/en/latest/settings.html#inline-settings
 =======
+
 # SublimeLinter-contrib-AWS-Cloudformation-JSON
+# http://www.makotemplates.org/
+# TODO: arn:aws:elasticbeanstalk:region:accountid:resourcetype/resourcepath
+# http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.policies.arn.html
+# http://stackoverflow.com/questions/23416098/how-do-i-change-the-color-of-the-json-key-in-sublime-text2
