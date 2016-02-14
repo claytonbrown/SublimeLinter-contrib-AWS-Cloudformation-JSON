@@ -1,0 +1,15 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type" : "AWS::CloudFront::Distribution",
+   "Properties" : {
+      "DistributionConfig" : DistributionConfig
+   }
+}
+      
+]]></content>
+    <tabTrigger>cloudfrontdistribution</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

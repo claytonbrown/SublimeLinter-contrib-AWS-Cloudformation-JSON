@@ -1,0 +1,20 @@
+
+<snippet>
+    <content><![CDATA[
+"sgwithoutegress": {
+  "Type": "AWS::EC2::SecurityGroup",
+  "Properties": {
+    "GroupDescription": "Limits security group egress traffic",
+    "SecurityGroupEgress": [
+      {
+        "CidrIp": "127.0.0.1/32",
+        "IpProtocol": "-1"
+      }
+    ],
+    "VpcId": { "Ref": "myVPC"}
+  }
+}
+]]></content>
+    <tabTrigger>ec2securitygroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

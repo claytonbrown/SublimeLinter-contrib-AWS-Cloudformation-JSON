@@ -1,0 +1,15 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type": "AWS::IAM::UserToGroupAddition",
+   "Properties": {
+      "GroupName": String,
+      "Users": [ User1, ... ]
+   }
+}     
+]]></content>
+    <tabTrigger>iamaddusertogroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

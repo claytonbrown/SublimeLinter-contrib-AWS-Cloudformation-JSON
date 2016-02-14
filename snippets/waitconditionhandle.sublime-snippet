@@ -1,0 +1,12 @@
+
+<snippet>
+    <content><![CDATA[
+{
+   "Type" : "AWS::CloudFormation::WaitConditionHandle",
+   "Properties" : {
+   }
+}
+]]></content>
+    <tabTrigger>waitconditionhandle</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

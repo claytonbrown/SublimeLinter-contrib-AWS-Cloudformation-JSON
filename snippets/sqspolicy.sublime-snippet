@@ -1,0 +1,15 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type" : "AWS::SQS::QueuePolicy",
+   "Properties" : {
+      "PolicyDocument" : JSON,
+      "Queues" : [ String, ... ]
+   }
+}
+]]></content>
+    <tabTrigger>sqspolicy</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

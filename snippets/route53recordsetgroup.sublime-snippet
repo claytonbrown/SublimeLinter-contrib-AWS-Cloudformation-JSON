@@ -1,0 +1,17 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type" : "AWS::Route53::RecordSetGroup",
+   "Properties" : {
+      "Comment" : String,
+      "HostedZoneId" : String,
+      "HostedZoneName" : String,
+      "RecordSets" : [ RecordSet1, ... ]
+   }
+}
+]]></content>
+    <tabTrigger>route53recordsetgroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

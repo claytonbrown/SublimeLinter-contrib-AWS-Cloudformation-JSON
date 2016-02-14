@@ -1,0 +1,16 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type": "AWS::IAM::AccessKey",
+   "Properties": {
+      "Serial": Integer,
+      "Status": String,
+      "UserName": String
+   }
+}     
+]]></content>
+    <tabTrigger>iamaccesskey</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

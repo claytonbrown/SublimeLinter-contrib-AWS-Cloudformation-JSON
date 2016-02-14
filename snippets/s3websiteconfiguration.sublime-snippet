@@ -1,0 +1,18 @@
+
+<snippet>
+    <content><![CDATA[
+
+"S3Bucket" : {
+   "Type" : "AWS::S3::Bucket",
+   "Properties" : {
+      "AccessControl" : "PublicRead",
+      "WebsiteConfiguration" : {
+         "IndexDocument" : "index.html",
+         "ErrorDocument" : "error.html"
+      }
+   }
+}     
+]]></content>
+    <tabTrigger>s3websiteconfiguration</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

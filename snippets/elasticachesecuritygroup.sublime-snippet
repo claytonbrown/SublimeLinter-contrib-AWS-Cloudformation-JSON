@@ -1,0 +1,14 @@
+
+<snippet>
+    <content><![CDATA[
+{
+  "Type" : "AWS::ElastiCache::SecurityGroup",
+  "Properties" :
+  {
+    "Description" : String
+  }
+}
+]]></content>
+    <tabTrigger>elasticachesecuritygroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

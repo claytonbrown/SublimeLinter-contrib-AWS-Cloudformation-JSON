@@ -1,0 +1,77 @@
+
+<snippet>
+    <content><![CDATA[
+"ElasticLoadBalancer": {
+  "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+  "Properties": {
+    "SecurityGroups" : { "Ref" : "SecurityGroups" },
+    "Scheme" : "internet-facing",
+    "AvailabilityZones": { "Fn::GetAZs": "" },
+    "Listeners": [
+      {
+        "LoadBalancerPort": "80",
+        "InstancePort": "80",
+        "Protocol": "TCP",
+        "InstanceProtocol" : "TCP"
+      },
+      {
+        "LoadBalancerPort": "443",
+        "InstancePort": "443",
+        "Protocol": "HTTPS",
+        "SSLCertificateId" : { "Ref" : "CertARN" },
+        "PolicyNames" : ["MySSLNegotiationPolicy", "MyAppCookieStickinessPolicy"]
+      }
+    ],
+    "Policies" : [
+      {
+        "PolicyName" : "MySSLNegotiationPolicy",
+        "PolicyType" : "SSLNegotiationPolicyType",
+        "Attributes" : [
+            { "Name" : "Protocol-TLSv1", "Value" : "true" },
+            { "Name" : "Protocol-SSLv2", "Value" : "true" },
+            { "Name" : "Protocol-SSLv3", "Value" : "false" },
+            { "Name" : "DHE-RSA-AES256-SHA", "Value" : "true" }
+        ]
+      },
+      {
+        "PolicyName" : "MyAppCookieStickinessPolicy",
+        "PolicyType" : "AppCookieStickinessPolicyType",
+        "Attributes" : [
+          { "Name" : "CookieName", "Value" : "MyCookie" }
+        ]
+      },
+      {
+        "PolicyName" : "MyPublicKeyPolicy",
+        "PolicyType" : "PublicKeyPolicyType",
+        "Attributes" : [
+          { "Name" : "PublicKey", "Value" : { "Fn::Join" : [ "\n", [
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDh/51Aohx5VrpmlfGHZCzciMBa",
+            "fkHve+MQYYJcxmNUKMdsWnz9WtVfKxxWUU7Cfor4lorYmENGCG8FWqCoLDMFs7pN",
+            "yGEtpsrlKhzZWtgY1d7eGrUrBil03bI90E2KW0j4qAwGYAC8xixOkNClicojeEz4",
+            "f4rr3sUf+ZBSsuMEuwIDAQAB" ] ] }
+          }
+        ]
+      },
+      {
+        "PolicyName" : "MyBackendServerAuthenticationPolicy",
+        "PolicyType" : "BackendServerAuthenticationPolicyType",
+        "Attributes" : [
+          { "Name" : "PublicKeyPolicyName", "Value" : "MyPublicKeyPolicy" }
+        ],
+        "InstancePorts" : [ "443" ]
+      },
+      {
+        "PolicyName" : "EnableProxyProtocol",
+        "PolicyType" : "ProxyProtocolPolicyType",
+        "Attributes" : [
+          { "Name"  : "ProxyProtocol", "Value" : "true" }
+        ],
+        "InstancePorts" : ["80"]
+      }
+    ]
+  }
+}
+]]></content>
+    <tabTrigger>ec2elb</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

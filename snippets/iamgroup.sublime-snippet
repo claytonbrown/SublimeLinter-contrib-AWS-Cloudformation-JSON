@@ -1,0 +1,16 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type": "AWS::IAM::Group",
+   "Properties": {
+      "ManagedPolicyArns": [ String, ... ],
+      "Path": String,
+      "Policies": [ Policies, ... ]
+   }
+}     
+]]></content>
+    <tabTrigger>iamgroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

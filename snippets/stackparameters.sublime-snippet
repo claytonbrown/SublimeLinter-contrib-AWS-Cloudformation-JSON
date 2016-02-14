@@ -1,0 +1,24 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "AWSTemplateFormatVersion" : "2010-09-09",
+   "Resources" : {
+      "myStackWithParams" : {
+         "Type" : "AWS::CloudFormation::Stack",
+         "Properties" : {
+            "TemplateURL" : "https://s3.amazonaws.com/cloudformation-templates-us-east-1/EC2ChooseAMI.template",
+            "Parameters" : {
+               "InstanceType" : "t1.micro",
+               "KeyName" : "mykey"
+            }
+         }
+      }
+   }
+}
+
+]]></content>
+    <tabTrigger>stackparameters</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

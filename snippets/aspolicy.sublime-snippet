@@ -1,0 +1,28 @@
+
+<snippet>
+    <content><![CDATA[
+"StepScaling" : {
+  "Type" : "AWS::AutoScaling::ScalingPolicy",
+  "Properties" : {
+    "AdjustmentType" : "ExactCapacity",
+    "AutoScalingGroupName" : { "Ref" : "ASG" },
+    "PolicyType" : "StepScaling",
+    "MetricAggregationType" : "Average",
+    "EstimatedInstanceWarmup" : "60",
+    "StepAdjustments": [
+      {
+        "MetricIntervalLowerBound": "0",
+        "MetricIntervalUpperBound" : "50",
+        "ScalingAdjustment": "1"
+      },
+      {
+        "MetricIntervalLowerBound": "50",
+        "ScalingAdjustment": "2"
+      }
+    ]
+  }
+}
+]]></content>
+    <tabTrigger>aspolicy</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

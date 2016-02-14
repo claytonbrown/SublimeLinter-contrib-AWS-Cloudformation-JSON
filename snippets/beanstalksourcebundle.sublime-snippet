@@ -1,0 +1,13 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "S3Bucket" : { "Fn::Join" :
+      ["-", [ "elasticbeanstalk-samples", { "Ref" : "AWS::Region" } ] ] },
+   "S3Key" : "samplefolder/php-sample.zip"
+}     
+]]></content>
+    <tabTrigger>beanstalksourcebundle</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

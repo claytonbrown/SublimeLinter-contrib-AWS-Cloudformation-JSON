@@ -1,0 +1,23 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type" : "AWS::ElasticBeanstalk::Environment",
+   "Properties" : {
+      "ApplicationName" : { "Ref" : "sampleApplication" },
+      "Description" :  "AWS Elastic Beanstalk Environment running Python Sample Application",
+      "EnvironmentName" :  "SamplePythonEnvironment",
+      "SolutionStackName" : "64bit Amazon Linux running Python",
+      "OptionSettings" : [ {
+         "Namespace" : "aws:autoscaling:launchconfiguration",
+         "OptionName" : "EC2KeyName",
+         "Value" : { "Ref" : "KeyName" }
+      } ],
+      "VersionLabel" : "Initial Version"
+   }
+}         
+]]></content>
+    <tabTrigger>beanstalkenvironment</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

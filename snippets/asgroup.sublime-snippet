@@ -1,0 +1,24 @@
+
+<snippet>
+    <content><![CDATA[
+"ASG1" : {
+   "UpdatePolicy" : {
+      "AutoScalingRollingUpdate" : {
+         "MinInstancesInService" : "1",
+         "MaxBatchSize" : "1",
+         "PauseTime" : "PT12M5S",
+         "WaitOnResourceSignals" : "true"
+      }
+   },
+   "Type" : "AWS::AutoScaling::AutoScalingGroup",
+   "Properties" : {
+      "AvailabilityZones" : { "Fn::GetAZs" : { "Ref" : "AWS::Region" } },
+      "LaunchConfigurationName" : { "Ref" : "ASLC" },
+      "MaxSize" : "3",
+      "MinSize" : "1"
+   }
+}
+]]></content>
+    <tabTrigger>asgroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

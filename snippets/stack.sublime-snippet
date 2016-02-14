@@ -1,0 +1,18 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type" : "AWS::CloudFormation::Stack",
+   "Properties" : {
+      "NotificationARNs" : [ String, ... ],
+      "Parameters" : { CloudFormation Stack Parameters Property Type },
+      "TemplateURL" : String,
+      "TimeoutInMinutes" : String
+   }
+}
+     
+]]></content>
+    <tabTrigger>stack</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

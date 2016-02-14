@@ -1,0 +1,27 @@
+
+<snippet>
+    <content><![CDATA[
+
+"WebServerGroup" : {
+   "Type" : "AWS::AutoScaling::AutoScalingGroup",
+   "Properties" : {
+      "AvailabilityZones" : { "Fn::GetAZs" : "" },
+      "LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
+      "MinSize" : "1",
+      "MaxSize" : "2",
+      "LoadBalancerNames" : [ { "Ref" : "ElasticLoadBalancer" } ],
+      "Tags" : [ {
+         "Key" : "MyTag1",
+         "Value" : "Hello World 1",
+         "PropagateAtLaunch" : "true"
+      }, {
+         "Key" : "MyTag2",
+         "Value" : "Hello World 2",
+         "PropagateAtLaunch" : "false"
+      } ]
+   }
+}     
+]]></content>
+    <tabTrigger>astags</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

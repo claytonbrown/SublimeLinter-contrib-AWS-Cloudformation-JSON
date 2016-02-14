@@ -1,0 +1,34 @@
+
+<snippet>
+    <content><![CDATA[
+
+"Ec2Instance" : {
+   "Type" : "AWS::EC2::Instance",
+   "Properties" : {
+      "AvailabilityZone" : {
+         "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "TestAz" ]
+      },
+      "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+      "KeyName" : { "Ref" : "KeyName" },
+      "ImageId" : {
+         "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]
+      },
+      "Volumes" : [
+         { "VolumeId" : { "Ref" : "NewVolume" }, "Device" : "/dev/sdk" }
+      ]
+   }
+},
+"NewVolume" : {
+   "Type" : "AWS::EC2::Volume",
+   "Properties" : {
+      "Size" : "100",
+      "AvailabilityZone" : {
+         "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "TestAz" ]
+      }
+   }
+}
+
+]]></content>
+    <tabTrigger>ec2mountpoint</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

@@ -1,0 +1,15 @@
+
+<snippet>
+    <content><![CDATA[
+{
+  "Type" : "AWS::SNS::TopicPolicy",
+  "Properties" :
+    {
+      "PolicyDocument" : JSON,
+      "Topics" : [ List of SNS topic ARNs, ... ]
+    }
+}
+]]></content>
+    <tabTrigger>snspolicy</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

@@ -1,0 +1,27 @@
+
+<snippet>
+    <content><![CDATA[
+"myDynamoDBTable" : {
+   "Type" : "AWS::DynamoDB::Table",
+   "Properties" : {
+      "KeySchema" : {
+         "HashKeyElement": {
+            "AttributeName" : "AttributeName1",
+            "AttributeType" : "S"
+         },
+         "RangeKeyElement" : {
+            "AttributeName" : "AttributeName2",
+            "AttributeType" : "N"
+         }
+      },
+      "ProvisionedThroughput" : {
+         "ReadCapacityUnits" : "5",
+         "WriteCapacityUnits" : "10"
+      },
+      "TableName" : "Sample Table"
+   }
+}
+]]></content>
+    <tabTrigger>name</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

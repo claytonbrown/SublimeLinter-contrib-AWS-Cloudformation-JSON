@@ -1,0 +1,19 @@
+
+<snippet>
+    <content><![CDATA[
+"SGPing" : {
+  "Type" : "AWS::EC2::SecurityGroup",
+  "DependsOn": "VPC",
+  "Properties" : {
+    "GroupDescription" : "SG to test ping",
+    "VpcId" : {"Ref" : "VPC"},
+    "SecurityGroupIngress" : [ 
+      { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "10.0.0.0/24" },
+      { "IpProtocol" : "icmp", "FromPort" : "8", "ToPort" : "-1", "CidrIp" : "10.0.0.0/24" }
+    ]
+  }
+}
+]]></content>
+    <tabTrigger>ec2securitygroupingress</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

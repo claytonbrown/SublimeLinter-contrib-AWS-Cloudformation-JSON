@@ -1,0 +1,17 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type": "AWS::RDS::DBParameterGroup",
+   "Properties" : {
+      "Description" : String,
+      "Family" : String,
+      "Parameters" : DBParameters,
+      "Tags" : [ Resource Tag, ... ]
+   }
+}
+]]></content>
+    <tabTrigger>rdsdbparametergroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

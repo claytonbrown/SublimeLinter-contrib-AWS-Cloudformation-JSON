@@ -1,0 +1,18 @@
+
+<snippet>
+    <content><![CDATA[
+
+{
+   "Type": "AWS::EC2::EIPAssociation",
+   "Properties": {
+      "AllocationId": String,
+      "EIP": String,
+      "InstanceId": String,
+      "NetworkInterfaceId": String,
+      "PrivateIpAddress": String
+   }
+}
+]]></content>
+    <tabTrigger>ec2eipassociation</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

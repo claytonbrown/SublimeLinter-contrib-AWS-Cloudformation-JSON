@@ -1,0 +1,14 @@
+
+<snippet>
+    <content><![CDATA[
+"SubnetGroup" : {
+    "Type" : "AWS::ElastiCache::SubnetGroup",
+    "Properties" : {
+        "Description" : "Cache Subnet Group",
+        "SubnetIds" : [ { "Ref" : "Subnet1" }, { "Ref" : "Subnet2" } ]
+    }
+}
+]]></content>
+    <tabTrigger>elasticachesubnetgroup</tabTrigger> 
+    <scope>source.cloudformation</scope>
+</snippet>

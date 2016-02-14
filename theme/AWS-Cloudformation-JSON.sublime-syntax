@@ -1,0 +1,238 @@
+---
+name: CloudFormation
+file_extensions:
+  - cf
+  - template
+  - cfn
+  - cf.json
+  - cfn.json
+  - iam
+  - iam.json
+  - policy.json
+scope: source.json
+contexts:
+  main:
+    - include: value
+  array:
+    - match: '\['
+      captures:
+        0: punctuation.definition.array.begin.json
+      push:
+        - meta_scope: meta.structure.array.json
+        - match: '\]'
+          captures:
+            0: punctuation.definition.array.end.json
+          pop: true
+        - include: value
+        - match: ","
+          scope: punctuation.separator.array.json
+        - match: '[^\s\]]'
+          scope: invalid.illegal.expected-array-separator.json
+  comments:
+    - match: /\*\*
+      captures:
+        0: punctuation.definition.comment.json
+      push:
+        - meta_scope: comment.block.documentation.json
+        - match: \*/
+          pop: true
+    - match: /\*
+      captures:
+        0: punctuation.definition.comment.json
+      push:
+        - meta_scope: comment.block.json
+        - match: \*/
+          pop: true
+    - match: (//).*$\n?
+      scope: comment.line.double-slash.js
+      captures:
+        1: punctuation.definition.comment.json
+  constant:
+    - match: \b(?:true|false|null)\b
+      scope: constant.language.json
+  number:
+    - match: |-
+        (?x:         # turn on extended mode
+          -?         # an optional minus
+          (?:
+            0        # a zero
+            |        # ...or...
+            [1-9]    # a 1-9 character
+            \d*      # followed by zero or more digits
+          )
+          (?:
+            (?:
+              \.     # a period
+              \d+    # followed by one or more digits
+            )?
+            (?:
+              [eE]   # an e character
+              [+-]?  # followed by an option +/-
+              \d+    # followed by one or more digits
+            )?       # make exponent optional
+          )?         # make decimal portion optional
+        )
+      comment: handles integer and decimal numbers
+      scope: constant.numeric.json
+  object:
+    - match: '\{'
+      comment: a JSON object
+      captures:
+        0: punctuation.definition.dictionary.begin.json
+      push:
+        - meta_scope: meta.structure.dictionary.json
+        - match: '\}'
+          captures:
+            0: punctuation.definition.dictionary.end.json
+          pop: true
+        - include: string
+        - include: comments
+        - match: ":"
+          captures:
+            0: punctuation.separator.dictionary.key-value.json
+          push:
+            - meta_scope: meta.structure.dictionary.value.json
+            - match: '(,)|(?=\})'
+              captures:
+                1: punctuation.separator.dictionary.pair.json
+              pop: true
+            - include: value
+            - match: '[^\s,]'
+              scope: invalid.illegal.expected-dictionary-separator.json
+        - match: '[^\s\}]'
+          scope: invalid.illegal.expected-dictionary-separator.json
+  
+  root_schema_objects:
+    - match: 'Mappings|Description|Parameters|AWSTemplateFormatVersion|Outputs|Conditions|Resources|Metadata'
+    comment: a JSON object
+      captures:
+        0: root_schema_objects.cloudformation.aws.json
+
+  aws_resource_type:
+    - match: 'AWS\:\:CloudFront\:\:Distribution|AWS\:\:CodeDeploy\:\:Application|AWS\:\:RDS\:\:DBParameterGroup|AWS\:\:OpsWorks\:\:ElasticLoadBalancerAttachment|AWS\:\:Redshift\:\:Cluster|AWS\:\:CloudFormation\:\:Stack|AWS\:\:SQS\:\:QueuePolicy|AWS\:\:EFS\:\:FileSystem|AWS\:\:CloudFormation\:\:WaitConditionHandle|AWS\:\:CodePipeline\:\:Pipeline|AWS\:\:EC2\:\:SpotFleet|AWS\:\:S3\:\:BucketPolicy|AWS\:\:Route53\:\:RecordSetGroup|AWS\:\:Redshift\:\:ClusterSubnetGroup|AWS\:\:AutoScaling\:\:ScalingPolicy|AWS\:\:KMS\:\:Key|AWS\:\:Config\:\:ConfigurationRecorder|AWS\:\:EC2\:\:NetworkInterfaceAttachment|AWS\:\:AutoScaling\:\:ScheduledAction|AWS\:\:ElastiCache\:\:CacheCluster|AWS\:\:SQS\:\:Queue|AWS\:\:EC2\:\:InternetGateway|AWS\:\:Kinesis\:\:Stream|AWS\:\:Lambda\:\:Function|AWS\:\:WorkSpaces\:\:Workspace|AWS\:\:ElastiCache\:\:ReplicationGroup|AWS\:\:Config\:\:DeliveryChannel|AWS\:\:SNS\:\:TopicPolicy|AWS\:\:Logs\:\:LogGroup|AWS\:\:Config\:\:ConfigRule|AWS\:\:EC2\:\:SubnetRouteTableAssociation|AWS\:\:EC2\:\:VolumeAttachment|AWS\:\:EC2\:\:Volume|AWS\:\:RDS\:\:DBSecurityGroupIngress|AWS\:\:EC2\:\:DHCPOptions|AWS\:\:IAM\:\:InstanceProfile|AWS\:\:Lambda\:\:EventSourceMapping|AWS\:\:CloudTrail\:\:Trail|AWS\:\:WAF\:\:WebACL|AWS\:\:OpsWorks\:\:Layer|AWS\:\:EC2\:\:VPNGateway|AWS\:\:CloudWatch\:\:Alarm|AWS\:\:CloudFormation\:\:CustomResource|AWS\:\:AutoScaling\:\:AutoScalingGroup|AWS\:\:DirectoryService\:\:SimpleAD|AWS\:\:EC2\:\:VPCDHCPOptionsAssociation|AWS\:\:EC2\:\:VPNGatewayRoutePropagation|AWS\:\:Route53\:\:RecordSet|AWS\:\:EC2\:\:VPCPeeringConnection|AWS\:\:ElastiCache\:\:ParameterGroup|AWS\:\:Logs\:\:Destination|AWS\:\:EC2\:\:VPC|AWS\:\:AutoScaling\:\:LifecycleHook|AWS\:\:OpsWorks\:\:App|AWS\:\:IAM\:\:Role|AWS\:\:EC2\:\:SecurityGroupEgress|AWS\:\:EC2\:\:VPCGatewayAttachment|AWS\:\:CloudFormation\:\:WaitCondition|AWS\:\:S3\:\:Bucket|AWS\:\:Redshift\:\:ClusterSecurityGroup|AWS\:\:EC2\:\:RouteTable|AWS\:\:RDS\:\:DBCluster|AWS\:\:ElasticBeanstalk\:\:ApplicationVersion|AWS\:\:EC2\:\:NetworkAcl|AWS\:\:AutoScaling\:\:Trigger|AWS\:\:WAF\:\:SqlInjectionMatchSet|AWS\:\:EC2\:\:Subnet|AWS\:\:EC2\:\:Instance|AWS\:\:Route53\:\:HealthCheck|AWS\:\:ElastiCache\:\:SecurityGroupIngress|AWS\:\:DirectoryService\:\:MicrosoftAD|AWS\:\:Logs\:\:SubscriptionFilter|AWS\:\:CodeDeploy\:\:DeploymentGroup|AWS\:\:WAF\:\:ByteMatchSet|AWS\:\:SDB\:\:Domain|AWS\:\:IAM\:\:AccessKey|AWS\:\:ECS\:\:TaskDefinition|AWS\:\:IAM\:\:ManagedPolicy|AWS\:\:EC2\:\:SecurityGroup|AWS\:\:RDS\:\:DBSecurityGroup|AWS\:\:ElastiCache\:\:SubnetGroup|AWS\:\:DataPipeline\:\:Pipeline|AWS\:\:ElasticBeanstalk\:\:Application|AWS\:\:EC2\:\:SubnetNetworkAclAssociation|AWS\:\:EC2\:\:EIPAssociation|AWS\:\:IAM\:\:UserToGroupAddition|AWS\:\:WAF\:\:IPSet|AWS\:\:EC2\:\:EIP|AWS\:\:RDS\:\:EventSubscription|AWS\:\:Route53\:\:HostedZone|AWS\:\:RDS\:\:DBSubnetGroup|AWS\:\:EC2\:\:NetworkInterface|AWS\:\:IAM\:\:User|AWS\:\:RDS\:\:OptionGroup|AWS\:\:OpsWorks\:\:Instance|AWS\:\:RDS\:\:DBInstance|AWS\:\:EC2\:\:CustomerGateway|AWS\:\:EC2\:\:PlacementGroup|AWS\:\:AutoScaling\:\:LaunchConfiguration|AWS\:\:WAF\:\:Rule|AWS\:\:ECS\:\:Service|AWS\:\:SSM\:\:Document|AWS\:\:Logs\:\:LogStream|AWS\:\:EC2\:\:VPNConnection|AWS\:\:IAM\:\:Policy|AWS\:\:RDS\:\:DBClusterParameterGroup|AWS\:\:Logs\:\:MetricFilter|AWS\:\:EC2\:\:VPCEndpoint|AWS\:\:ElasticBeanstalk\:\:Environment|AWS\:\:IAM\:\:Group|AWS\:\:EC2\:\:SecurityGroupIngress|AWS\:\:ElasticBeanstalk\:\:ConfigurationTemplate|AWS\:\:EC2\:\:VPNConnectionRoute|AWS\:\:EC2\:\:Route|AWS\:\:EC2\:\:NetworkAclEntry|AWS\:\:CodeDeploy\:\:DeploymentConfig|AWS\:\:ElastiCache\:\:SecurityGroup|AWS\:\:Redshift\:\:ClusterSecurityGroupIngress|AWS\:\:SNS\:\:Topic|AWS\:\:ElasticLoadBalancing\:\:LoadBalancer|AWS\:\:DynamoDB\:\:Table|AWS\:\:Lambda\:\:Permission|AWS\:\:ECS\:\:Cluster|AWS\:\:OpsWorks\:\:Stack|AWS\:\:CodePipeline\:\:CustomActionType|AWS\:\:Redshift\:\:ClusterParameterGroup|AWS\:\:EFS\:\:MountTarget'
+      captures:
+        0: aws_resource_type.cloudformation.aws.json
+
+  pseudo_parameters:
+    - match: 'AWS\:\:NoValue|AWS\:\:AccountId|AWS\:\:NotificationARNs|AWS\:\:StackId|AWS\:\:StackName|AWS\:\:Region'
+      captures:
+        0: pseudo_parameters.cloudformation.aws.json        
+
+  intrinsic_functions:
+    - match: 'Fn\:\:Select|Fn\:\:If|Fn\:\:FindInMap|Fn\:\:GetAtt|Fn\:\:Join|Ref|Fn\:\:GetAZs|Fn\:\:Base64|Fn\:\:And|Fn\:\:Equals|Fn\:\:Not|Fn\:\:Or'
+      captures:
+        0: intrinsic_functions.cloudformation.aws.json      
+
+  arns:
+    - match: 'arn\:aws\:arn\:aws\:iam\:\:123456789012\:u\*\:|arn\:aws\:apigateway\:|arn\:aws\:appstream\:|arn\:aws\:autoscaling\:|arn\:aws\:aws\-portal\:|arn\:aws\:cloudformation\:|arn\:aws\:cloudfront\:|arn\:aws\:cloudsearch\:|arn\:aws\:cloudtrail\:|arn\:aws\:cloudwatch\:|arn\:aws\:events\:|arn\:aws\:logs\:|arn\:aws\:codecommit\:|arn\:aws\:codedeploy\:|arn\:aws\:codepipeline\:|arn\:aws\:cognito\-identity\:|arn\:aws\:cognito\-sync\:|arn\:aws\:config\:|arn\:aws\:datapipeline\:|arn\:aws\:devicefarm\:|arn\:aws\:directconnect\:|arn\:aws\:ds\:|arn\:aws\:dynamodb\:|arn\:aws\:elasticbeanstalk\:|arn\:aws\:ec2\:|arn\:aws\:elasticloadbalancing\:|arn\:aws\:elasticmapreduce\:|arn\:aws\:elastictranscoder\:|arn\:aws\:elasticache\:|arn\:aws\:es\:|arn\:aws\:glacier\:|arn\:aws\:iam\:|arn\:aws\:importexport\:|arn\:aws\:kms\:|arn\:aws\:kinesis\:|arn\:aws\:lambda\:|arn\:aws\:machinelearning\:|arn\:aws\:aws\-marketplace\:|arn\:aws\:aws\-marketplace\-management\:|arn\:aws\:mobileanalytics\:|arn\:aws\:opsworks\:|arn\:aws\:redshift\:|arn\:aws\:rds\:|arn\:aws\:route53\:|arn\:aws\:sts\:|arn\:aws\:servicecatalog\:|arn\:aws\:ses\:|arn\:aws\:sns\:|arn\:aws\:sqs\:|arn\:aws\:s3\:|arn\:aws\:swf\:|arn\:aws\:sdb\:|arn\:aws\:storagegateway\:|arn\:aws\:support\:|arn\:aws\:trustedadvisor\:|arn\:aws\:ec2\:|arn\:aws\:waf\:|arn\:aws\:workspaces\:'
+      captures:
+        0: arns.cloudformation.aws.json      
+
+  resource_properties:
+    - match: 'WriteCapacityUnits|OptionsToRemove|SnapshotClusterIdentifier|HostnameTheme|SecurityGroupEgress|RoutingRuleCondition|ShardCount|UseOpsworksSecurityGroups|Metadata|WhitelistedNames|DeviceName|SmoothStreaming|Host|DBSnapshotIdentifier|DeploymentGroupName|AgentVersion|Username|FunctionName|Roles|EnvironmentId|Region|MemorySize|Predicates|ViewerProtocolPolicy|Headers|PolicyDocument|MetricIntervalUpperBound|RevisionType|SnapshotArns|Secure|NameSpace|FromPort|KMSKeyId|SqlInjectionMatchTuples|BucketName|DhcpOptionsId|SourceIds|RootVolumeEncryptionEnabled|StreamViewType|GeoLocation|RedrivePolicy|AssumeRolePolicyDocument|ContainerPath|Period|Version|LoadBalancerNames|Negated|EnvironmentName|CreationPolicy|ManagedPolicyArns|NoncurrentVersionExpirationInDays|TableName|KeySchema|AutoMinorVersionUpgrade|NtpServers|EventSourceArn|EntityUrlTemplate|NoEcho|TTL|BreachDuration|Revision|MessageRetentionPeriod|RuleNumber|Logging|NumberOfDisks|ArtifactStore|VolumeSize|Volumes|DefaultInstanceProfileArn|Cpu|VolumesFrom|AvailabilityZone|Fn\:\:Equals|CustomJson|Tuesday|VPCRegion|DatabaseName|Owner|BundleType|Category|DirectoryId|IncludeGlobalServiceEvents|Mappings|Certificate|EIP|ChefConfiguration|ReceiveMessageWaitTimeSeconds|ExecutionTimeout|Conditions|Status|AppSource|Configure|LocalSecondaryIndexes|StringValue|ClassicLinkVPCId|IgnoreMetricsTime|RedirectRule|AllowedValues|ErrorCode|HeartbeatTimeout|SsmAssociations|AttributeType|MetricAggregationType|DBSubnetGroupName|CreateAlias|ConstraintDescription|DBName|Count|GroupSet|GitHubLocation|DefaultRootObject|Default|Fn\:\:Not|Failover|Required|AutoScalingGroupName|Wednesday|ClusterSubnetGroupName|SourceDBInstanceIdentifier|DefaultOs|AppCookieStickinessPolicy|DestinationCidrBlock|MapPublicIpOnLaunch|RunOrder|Family|OriginProtocolPolicy|MaxValue|LifecycleHookName|S3Key|AlarmName|MaxLength|ShortName|SnapshotIdentifier|HttpErrorCodeReturnedEquals|DataId|RouteTableId|PubliclyAccessible|RoleArn|AutoAssignPublicIps|HostedZoneId|Scheme|QueueName|MinimumHealthyHosts|CpuThreshold|MaxAge|MinValue|ParameterGroupFamily|EC2SecurityGroupId|Granularity|BackupRetentionPeriod|Icmp|SpotPrice|UnhealthyThreshold|DeviceIndex|InputArtifacts|AutoScalingGroups|Url|RoleARN|SecurityGroupIds|ResponsePagePath|LifecycleConfiguration|PathPattern|MinimumCount|RevisionUrlTemplate|Runtime|S3Location|DefaultSubnetId|Activate|AttributeDefinitions|ParameterObjects|CrossZone|SslConfiguration|OutputArtifacts|DBSecurityGroupName|DBInstanceIdentifier|Protocol|HostName|RestrictionType|MinAdjustmentMagnitude|Ec2TagFilters|InputParameters|ClusterSecurityGroupName|CookieName|DefaultSshKeyName|DeliveryFrequency|CustomerGatewayId|MetricValue|NotificationTopicArn|TerminateInstancesWithExpiration|TagKey|DBSecurityGroupMemberships|Rules|UserVolumeEncryptionEnabled|OptionSettings|DomainNameServers|OptionGroupDescription|KeyName|ShutdownEventConfiguration|DefaultAvailabilityZone|TargetCapacity|HealthCheckGracePeriod|LaunchSpecifications|Fn\:\:Or|KeyType|Deployment|InstanceMonitoring|BlockDeviceMappings|Fn\:\:And|HsmConfigurationIdentifier|DistributionConfig|RootDeviceType|InstanceTenancy|NotificationTargetARN|ReplicationGroupDescription|Endpoint|TopicConfigurations|SourceConfiguration|RuleId|SubnetIds|ActionTypeId|DeleteOnTermination|Statistic|AutoEnableIO|DisableApiTermination|Event|AutomaticFailoverEnabled|StorageClass|SearchString|From|OwnerAccount|Namespace|VersionLabel|HttpRedirectCode|OptionConfigurations|ResponseCode|PositionalConstraint|Type|MetricName|Engine|EvaluationPeriods|Enable|SshKey|ThirdPartyConfigurationUrl|NumCacheNodes|OutputArtifactDetails|EnableSsl|EnableSso|VersioningConfiguration|Key|DBInstanceClass|ApplicationName|SnapshotName|CustomRecipes|DestinationName|PreferredCacheClusterAZs|MaximumCount|Architecture|LaunchConfigurationName|ProjectionType|Stages|GroupDescription|OptionGroupName|EstimatedInstanceWarmup|Monday|Chain|ParameterValues|Encrypted|Topics|DBSubnetGroupDescription|EnableAutoHealing|ForwardedValues|DestinationArn|MemoryThreshold|AdjustmentType|TopicName|LifecycleTransition|QueueConfigurations|ComplianceResourceTypes|AllowMajorVersionUpgrade|ByteMatchTuples|MasterUsername|HostedZoneConfig|VirtualName|ConfigSnapshotDeliveryProperties|Domains|Handler|WebsiteConfiguration|TargetArn|CustomSecurityGroupIds|NumberOfNodes|CacheSecurityGroupNames|Repository|ConfigRuleName|PlacementGroupName|SpotFleetRequestConfigData|SecurityGroupIngress|VpnGatewayId|Tier|SnapshotId|Packages|Data|InstanceType|NetworkInterfaces|DBClusterParameterGroupName|Restrictions|DeploymentConfigName|Interval|Enabled|StorageType|AllowedPattern|maxReceiveCount|LoadBalancerPorts|StartingPosition|BerkshelfVersion|LayerId|ParameterName|OKActions|RequestInterval|StaticRoutesOnly|ResourceSignal|PortMappings|Code|NodeType|RestartExecutionOnUpdate|SslSupportMethod|Cluster|IPSetDescriptors|TransitionDate|PolicyType|Shutdown|ExpirationInDays|BgpAsn|S3ObjectVersion|FailureThreshold|InternetGatewayId|Unit|DBParameterGroupName|ClusterParameterGroupName|DisableInboundStageTransitions|TargetOriginId|RoutingRules|Secret|NetbiosNameServers|AllocationId|Users|ConfigurationTemplates|Metrics|ConfigurationProperties|SecurityGroups|MetricNamespace|SourceSecurityGroupName|MetricsCollection|HealthCheckType|PreferredMaintenanceWindow|CacheSubnetGroupName|Transition|Name|LowerBreachScaleIncrement|HostPort|ReadCapacityUnits|ClusterType|NoDevice|GroupName|ParameterValue|CookieExpirationPeriod|ToPort|PolicyNames|IamInstanceProfile|VpcSecurityGroupMemberships|InstanceCount|EnableKeyRotation|VolumeId|Actions|Id|Instances|MultiAZ|SecondaryPrivateIpAddressCount|TextTransformation|CloudWatchLogsLogGroupArn|CidrBlock|Saturday|Principal|StackId|ElasticLoadBalancerName|SnapshotRetentionLimit|IsLogging|DNSName|Role|HTTPSPort|Forward|RamdiskId|HealthCheckTags|NoncurrentVersionTransition|Resources|EventCategories|ClusterVersion|PropagateAtLaunch|VPCs|LBCookieStickinessPolicy|UpperThreshold|AllowedOrigins|PasswordResetRequired|IndexDocument|ExecutionUrlTemplate|PortRange|MinimumProtocolVersion|InstanceInitiatedShutdownBehavior|Value|Listeners|RouteTableIds|HsmClientCertificateIdentifier|CustomErrorResponses|AssociationParameters|S3OriginConfig|AssociatePublicIpAddress|DeletionPolicy|MaximumMessageSize|DefaultCacheBehavior|NotificationMetadata|PeerVpcId|StorageEncrypted|ExposedHeaders|CachedMethods|DestinationSecurityGroupId|ConnectionDrainingPolicy|MountPoints|PriceClass|EmitInterval|Priority|Location|ViewerCertificate|MountPoint|ValidFrom|OriginAccessIdentity|DBSecurityGroupIngress|HostedZoneTags|NetbiosNodeType|PipelineTags|AlarmActions|TemplateName|FieldToMatch|Prefix|DesiredCount|ActionsEnabled|AllocatedStorage|CloudWatchLogsRoleArn|SubnetId|SourceBundle|Subscription|Placement|Target|Settings|SourceContainer|Queue|VpcId|VpcPeeringConnectionId|VolumeConfigurations|DBSecurityGroups|InstanceProtocol|DownScaling|ApplicationVersions|SourceType|Primary|SnsTopicARN|LoadThreshold|IamCertificateId|KeyPrefixEquals|RedirectAllRequestsTo|EC2VpcId|RecordSets|ExcessCapacityTerminationPolicy|UserName|ContainerName|Monitoring|CorsRules|MinAdjustmentStep|deadLetterTargetArn|VPCZoneIdentifier|NonKeyAttributes|DependsOn|EndTime|EC2SecurityGroupName|Tags|CloudFrontDefaultCertificate|Outputs|ImageId|Tenancy|ExpirationDate|Groups|PlacementTenancy|Properties|AmiId|CacheParameterGroupFamily|DefaultAction|FileSystemId|Path|Action|Essential|TargetString|DelayUntilElbConnectionsDrained|DefaultRootDeviceType|To|DestinationBucketName|AttributeName|ResourceRecords|SnsTopicArn|PreferredAvailabilityZone|ResourceTypes|Cooldown|ManageBerkshelf|CacheSecurityGroupName|LogFilePrefix|DocumentName|Size|FileSystemTags|OriginPath|PlacementGroup|UseCustomCookbooks|LayerIds|ZipFile|ResourcePath|Content|LambdaConfigurations|EngineName|EvaluateTargetHealth|CIDRIP|LifecycleEventConfiguration|VPCId|LoadBasedAutoScaling|MaximumExecutionFrequency|MaxSize|AutomatedSnapshotRetentionPeriod|InputArtifactDetails|RetentionInDays|NetworkInterfaceId|SourceDestCheck|AccessLoggingPolicy|LoggingConfiguration|AWSTemplateFormatVersion|Queues|SubdivisionCode|Bucket|CustomOriginConfig|S3Bucket|KernelId|Serial|GlobalSecondaryIndexes|PrivateKey|VpcSettings|CidrIp|RecordingGroup|StepAdjustments|UpScaling|Threshold|AvailabilityZones|LoadBalancerName|Port|OnPremisesInstanceTagFilters|NetworkAclId|NotificationConfigurations|Destination|VolumeType|Sunday|SourceVolume|Scope|EC2SecurityGroupOwnerId|PrivateIpAddress|CacheNodeType|ReplicationConfiguration|MajorEngineVersion|StageName|LoadBalancers|SshKeyName|Friday|Queryable|Blockers|Reason|TemplateURL|IPAddress|ContainerPort|ErrorCachingMinTTL|Undeploy|PolicyName|ReplaceKeyPrefixWith|ServiceName|Setup|MinSize|PipelineObjects|RuleAction|GatewayId|Attributes|InstallUpdatesOnBoot|OptionName|SourceArn|Cookies|Links|IamFleetRole|ThresholdsWaitTime|AlarmDescription|LoginProfile|WeightedCapacity|Topic|HTTPPort|ReadOnly|Egress|SnapshotWindow|Ebs|AllSupported|AllowedMethods|ContinentCode|KeyPolicy|DisplayName|Parameters|DomainName|LicenseModel|UpperBreachScaleIncrement|LogStreamName|VisibilityTimeout|ContainerDefinitions|TopicARN|WebACLId|ServiceRoleArn|CountryCode|Subnets|EnableDnsHostnames|SourceSecurityGroupId|StreamSpecification|EnableLogFileValidation|LogGroupName|GroupId|Configuration|AllocationStrategy|S3BucketPrefix|Origins|CNAMEPrefix|CommitId|TagValue|Command|UpdatePolicy|Policies|IpProtocol|MinTTL|Comment|VolumeEncryptionKey|Domain|Weight|ClusterName|NotificationConfiguration|Image|TrustedSigners|KmsKeyId|TimeBasedAutoScaling|SnsTopicName|StartTime|RefValue|Aliases|CacheParameterGroupName|ValidUntil|Dimensions|LowerThreshold|ConfigurationManager|VpcSecurityGroupIds|ClassicLinkVPCSecurityGroups|Environment|EbsOptimized|NotificationTypes|Provider|DefaultResult|Shortname|CustomCookbooksSource|SSLCertificateId|EncryptionKey|CacheBehaviors|Deploy|TransitionInDays|RaidLevel|SolutionStackName|Device|InsufficientDataActions|TaskDefinition|Condition|ErrorDocument|MetricIntervalLowerBound|TimeoutInMinutes|PrivateIpAddresses|HealthyThreshold|TargetStringBase64|IgnoreApplicationStopFailures|Timeout|EngineVersion|ClusterSecurityGroups|AZMode|ScalingAdjustment|NumCacheClusters|AccessControl|ReplaceKeyWith|Projection|AllowedHeaders|LoadBalancerPort|Locations|IncludeCookies|ComparisonOperator|ComplianceResourceId|Iops|S3BucketName|GeoRestriction|InstancePorts|FullyQualifiedDomainName|Os|ProvisionedThroughput|HealthCheck|IdleTimeout|Thursday|DestinationPolicy|Recurrence|HealthCheckConfig|VPCSecurityGroups|Memory|DelaySeconds|SourceAccount|MetricTransformations|IpAddress|Function|Handle|Description|CorsConfiguration|DesiredCapacity|InstanceId|PreferredBackupWindow|SourceSecurityGroupOwnerId|ETag|CustomInstanceProfileArn|TerminationPolicies|Password|AliasTarget|BundleId|VpnConnectionId|InstancePort|EnableDnsSupport|S3KeyPrefix|Fields|BatchSize|ConnectionSettings|AllowVersionUpgrade|AutoAssignElasticIps|FilterPattern|UserData|CharacterSetName|IndexName|DBClusterIdentifier|ElasticIp|MinLength|Strategy|QueryString|MasterUserPassword|HostedZoneName|EntryPoint|SetIdentifier'
+      captures:
+        0: resource_properties.cloudformation.aws.json      
+  
+  parameter_properties:
+    - match: 'ConstraintDescription|Description|Default|MinLength|MaxValue|AllowedValues|AllowedPattern|NoEcho|MaxLength|MinValue|Type'
+      captures:
+        0: parameter_properties.cloudformation.aws.json      
+
+  instance_types:
+    - match: 'd2.2xlarge|g2.8xlarge|cg1.4xlarge|r3.4xlarge|t2.large|c1.medium|m3.large|m3.2xlarge|t2.small|r3.2xlarge|t1.micro|cr1.8xlarge|c3.large|c4.8xlarge|c3.xlarge|m1.large|hs1.8xlarge|c3.2xlarge|c4.xlarge|c3.4xlarge|m4.large|t2.medium|t2.nano|hi1.4xlarge|i2.8xlarge|m2.2xlarge|d2.4xlarge|d2.8xlarge|c4.4xlarge|t2.micro|c1.xlarge|m4.xlarge|g2.2xlarge|r3.8xlarge|c4.2xlarge|c3.8xlarge|m2.xlarge|m4.10xlarge|m1.medium|d2.xlarge|r3.large|i2.xlarge|m3.medium|m1.small|cc2.8xlarge|r3.xlarge|c4.large|m4.2xlarge|i2.2xlarge|i2.4xlarge|m1.xlarge|m4.4xlarge|m2.4xlarge|m3.xlarge'
+      captures:
+        0: instance_types.cloudformation.aws.json      
+
+
+  regions:
+    - match: 'us\-east\-1|ap\-northeast\-1|ap\-southeast\-2|eu\-west\-1|ap\-northeast\-2|ap\-southeast\-1|cn\-north\-1|us\-west\-2|us\-gov\-west\-1|us\-west\-1|eu\-central\-1|sa\-east\-1'
+      captures:
+        0: regions.cloudformation.aws.json      
+
+
+  availability_zones:
+    - match: ''
+      captures:
+        0: availability_zones.cloudformation.aws.json      
+
+
+  arch:
+    - match: 'TODO\-arch'
+      captures:
+        0: arch.cloudformation.aws.json      
+  
+  cfinit:
+    - match: 'TODO\-cfinit'
+      captures:
+        0: cfinit.cloudformation.aws.json      
+  
+  allowed_values:
+    - match: '1|2|4|8|\*|2010\-09\-09|A|AAAA|ALL|ALLOW|AWS|AWS\:\:CloudTrail\:\:Trail|AWS\:\:EC2\:\:AvailabilityZone\:\:Name|AWS\:\:EC2\:\:CustomerGateway|AWS\:\:EC2\:\:EIP|AWS\:\:EC2\:\:Host|AWS\:\:EC2\:\:Image\:\:Id|AWS\:\:EC2\:\:Instance|AWS\:\:EC2\:\:Instance\:\:Id|AWS\:\:EC2\:\:InternetGateway|AWS\:\:EC2\:\:KeyPair\:\:KeyName|AWS\:\:EC2\:\:NetworkAcl|AWS\:\:EC2\:\:NetworkInterface|AWS\:\:EC2\:\:RouteTable|AWS\:\:EC2\:\:SecurityGroup|AWS\:\:EC2\:\:SecurityGroup\:\:GroupName|AWS\:\:EC2\:\:SecurityGroup\:\:Id|AWS\:\:EC2\:\:Subnet|AWS\:\:EC2\:\:Subnet\:\:Id|AWS\:\:EC2\:\:VPC|AWS\:\:EC2\:\:VPC\:\:Id|AWS\:\:EC2\:\:VPNConnection|AWS\:\:EC2\:\:VPNGateway|AWS\:\:EC2\:\:Volume|AWS\:\:EC2\:\:Volume\:\:Id|AWS\:\:Route53\:\:HostedZone\:\:Id|Active|AmazonProvidedDNS|AuthenticatedRead|Average|B|BLOCK|Bits|Bits\/Second|Boolean|BucketOwnerFullControl|BucketOwnerRead|Build|ByteMatch|Bytes|Bytes\/Second|CNAME|COUNT|ChangeInCapacity|CommaDelimitedList|Count|Count\/Second|Custom|DELETE|Delete|Deploy|Disabled|EC2|ELB|Enabled|ExactCapacity|GET|Gigabits|Gigabits\/Second|Gigabytes|Gigabytes\/Second|GitHub|Glacier|GreaterThanOrEqualToThreshold|GreaterThanThreshold|HASH|HEAD|HEADER|HTTP|HTTPS|HTTPS_STR_MATCH|HTTP_STR_MATCH|INCLUDE|IPMatch|IPV4|Inactive|Invoke|KEYS_ONLY|KEY_AND_VALUE|KEY_ONLY|Kilobits|Kilobits\/Second|Kilobytes|Kilobytes\/Second|Large|LessThanOrEqualToThreshold|LessThanThreshold|AWS\:\:EC2\:\:AvailabilityZone\:\:Name|AWS\:\:EC2\:\:Image\:\:Id|AWS\:\:EC2\:\:Instance\:\:Id|AWS\:\:EC2\:\:SecurityGroup\:\:GroupName|AWS\:\:EC2\:\:SecurityGroup\:\:Id|AWS\:\:EC2\:\:Subnet\:\:Id|AWS\:\:EC2\:\:VPC\:\:Id|AWS\:\:EC2\:\:Volume\:\:Id|AWS\:\:Route53\:\:HostedZone\:\:Id|LogDeliveryWrite|METHOD|MX|Maximum|Megabits|Megabits\/Second|Megabytes|Megabytes\/Second|Microseconds|Milliseconds|Minimum|MySQL|N|NEW_AND_OLD_IMAGES|NEW_IMAGE|NS|None|Number|OLD_IMAGE|OPTIONS|One_Hour|PATCH|POST|PRIMARY|PTR|PUT|Percent|PercentChangeInCapacity|Private|PublicRead|PublicReadWrite|QUERY_STRING|RANGE|Retain|S|S3|SECONDARY|SOA|SPF|SQS\/HTTP|SRV|SSL|SampleCount|Schedule|Seconds|SimpleScaling|Six_Hours|Small|Snapshot|Source|SqlInjectionMatch|StepScaling|String|Sum|Suspended|TCP|TXT|Terabits|Terabits\/Second|Terabytes|Terabytes\/Second|Test|ThirdParty|Three_Hours|Twelve_Hours|TwentyFour_Hours|URI|VALUE_ONLY|WebServer|Worker|all|allow|allow\-all|ap\-northeast\-1a|ap\-northeast\-1b|ap\-northeast\-1c|ap\-southeast\-1a|ap\-southeast\-1b|ap\-southeast\-2a|ap\-southeast\-2b|aurora|autoscaling\:EC2_INSTANCE_LAUNCH|autoscaling\:EC2_INSTANCE_LAUNCH_ERROR|autoscaling\:EC2_INSTANCE_TERMINATE|autoscaling\:EC2_INSTANCE_TERMINATE_ERROR|autoscaling\:TEST_NOTIFICATION|blacklist|c1.medium|c1.xlarge|c3.2xlarge|c3.4xlarge|c3.8xlarge|c3.large|c3.xlarge|cache.c1.xlarge|cache.m1.large|cache.m1.medium|cache.m1.small|cache.m1.xlarge|cache.m2.2xlarge|cache.m2.4xlarge|cache.m2.xlarge|cache.m3.2xlarge|cache.m3.large|cache.m3.medium|cache.m3.xlarge|cache.r3.2xlarge|cache.r3.4xlarge|cache.r3.8xlarge|cache.r3.large|cache.r3.xlarge|cache.t1.micro|cache.t2.medium|cache.t2.micro|cache.t2.small|cc1.4xlarge|cc2.8xlarge|cg1.4xlarge|cr1.8xlarge|db\-instance|db.m1.large|db.m1.medium|db.m1.small|db.m1.xlarge|db.m2.2xlarge|db.m2.4xlarge|db.m2.xlarge|db.m3.2xlarge|db.m3.large|db.m3.medium|db.m3.xlarge|db.m4.10xlarge|db.m4.2xlarge|db.m4.4xlarge|db.m4.large|db.m4.xlarge|db.r3.2xlarge|db.r3.4xlarge|db.r3.8xlarge|db.r3.large|db.r3.xlarge|db.t1.micro|db.t2.large|db.t2.medium|db.t2.micro|db.t2.small|dedicated|default|deny|dw.hs1.8xlarge|dw.hs1.xlarge|email|email\-json|eu\-west\-1a|eu\-west\-1b|eu\-west\-1c|g2.2xlarge|gp2|hi1.4xlarge|hs1.8xlarge|http|http\-only|https|https\-only|i2.2xlarge|i2.4xlarge|i2.8xlarge|i2.xlarge|icmp|io1|ipsec.1|java8|m1.large|m1.medium|m1.small|m1.xlarge|m2.2xlarge|m2.4xlarge|m2.xlarge|m3.2xlarge|m3.large|m3.medium|m3.xlarge|mariadb|match\-viewer|memcached|multi\-node|nodejs|none|oracle\-ee|oracle\-se|oracle\-se1|postgres|python2.7|r3.2xlarge|r3.4xlarge|r3.8xlarge|r3.large|r3.xlarge|redirect\-to\-https|redis|s3\:ObjectCreated\:\*|s3\:ObjectCreated\:CompleteMultipartUpload|s3\:ObjectCreated\:Copy|s3\:ObjectCreated\:Post|s3\:ObjectCreated\:Put|s3\:ObjectRemoved\:\*|s3\:ObjectRemoved\:Delete|s3\:ObjectRemoved\:DeleteMarkerCreated|s3\:ReducedRedundancyLostObject|sa\-east\-1a|sa\-east\-1b|single\-node|sms|sqlserver\-ee|sqlserver\-ex|sqlserver\-se|sqlserver\-web|sqs|standard|t1.micro|tar|tcp|tgz|udp|us\-east\-1a|us\-east\-1b|us\-east\-1c|us\-east\-1d|us\-east\-1e|us\-west\-1a|us\-west\-1b|us\-west\-1c|us\-west\-2a|us\-west\-2b|us\-west\-2c|whitelist|zip'
+      captures:
+        0: allowed_values.cloudformation.aws.json      
+  
+  iam_properties:
+    - match: 'TODO\-iam_properties'
+      captures:
+        0: iam_properties.cloudformation.aws.json      
+  
+  iam_conditions:
+    - match: 'TODO\-iam_conditions'
+      captures:
+        0: iam_conditions.cloudformation.aws.json      
+
+  
+  endpoints:
+    - match: 'TODO\-endpoints'
+      captures:
+        0: endpoints.cloudformation.aws.json      
+
+  string:
+    - match: '"'
+      captures:
+        0: punctuation.definition.string.begin.json
+      push:
+        - meta_scope: string.quoted.double.json
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.end.json
+          pop: true
+        - match: |-
+            (?x:                # turn on extended mode
+              \\                # a literal backslash
+              (?:               # ...followed by...
+                ["\\/bfnrt]     # one of these characters
+                |               # ...or...
+                u               # a u
+                [0-9a-fA-F]{4}  # and four hex digits
+              )
+            )
+          scope: constant.character.escape.json
+        - match: \\.
+          scope: invalid.illegal.unrecognized-string-escape.json
+  value:
+    - include: root_schema_objects
+    - include: aws_resource_type
+    - include: pseudo_parameters
+    - include: intrinsic_functions
+    - include: arns
+    - include: resource_properties
+    - include: parameter_properties
+    - include: instance_types
+    - include: availability_zones
+    - include: arch
+    - include: regions
+    - include: availability_zones
+    - include: arch
+    - include: arch
+    - include: cfinit
+    - include: allowed_values
+    - include: iam_properties
+    - include: iam_conditions
+    - include: endpoints
+    - include: constant
+    - include: number
+    - include: string
+    - include: array
+    - include: object
+    - include: comments
